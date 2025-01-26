@@ -35,12 +35,28 @@ public class SendAnimation extends AbstractMultipartRequest<SendAnimation> {
         return add("height", height);
     }
 
+    /**
+     * @deprecated Use thumbnail instead
+     */
+    @Deprecated 
     public SendAnimation thumb(byte[] thumb) {
-        return super.thumb(thumb);
+        return thumbnail(thumb);
     }
 
+    /**
+     * @deprecated Use thumbnail instead
+     */
+    @Deprecated 
     public SendAnimation thumb(File thumb) {
-        return super.thumb(thumb);
+        return thumbnail(thumb);
+    }
+
+    public SendAnimation thumbnail(byte[] thumbnail) {
+        return super.thumbnail(thumbnail);
+    }
+
+    public SendAnimation thumbnail(File thumbnail) {
+        return super.thumbnail(thumbnail);
     }
 
     public SendAnimation caption(String caption) {
@@ -53,6 +69,14 @@ public class SendAnimation extends AbstractMultipartRequest<SendAnimation> {
 
     public SendAnimation captionEntities(MessageEntity... entities) {
         return add("caption_entities", entities);
+    }
+
+    public SendAnimation hasSpoiler(boolean has_spoiler) {
+        return add("has_spoiler", has_spoiler);
+    }
+
+    public SendAnimation showCaptionAboveMedia(Boolean showCaptionAboveMedia) {
+        return add("show_caption_above_media", showCaptionAboveMedia);
     }
 
     @Override

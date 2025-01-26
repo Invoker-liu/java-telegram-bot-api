@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.request.*;
 import com.pengrad.telegrambot.request.*;
 import com.pengrad.telegrambot.response.*;
 
+import com.pengrad.telegrambot.utility.BotUtils;
 import org.junit.*;
 
 import static com.pengrad.telegrambot.TelegramBotTest.getProp;
@@ -168,7 +169,7 @@ public class PaymentsTest {
 
         assertNotNull(payment);
         assertEquals("USD", payment.currency());
-        assertEquals(Integer.valueOf(200), payment.totalAmount());
+        assertEquals(200, payment.totalAmount());
         assertEquals("my_payload", payment.invoicePayload());
         assertEquals("2", payment.shippingOptionId());
         assertEquals("tcid", payment.telegramPaymentChargeId());

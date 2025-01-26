@@ -1,7 +1,6 @@
 package com.pengrad.telegrambot.request;
 
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.InputFile;
 import com.pengrad.telegrambot.model.request.InputMedia;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
@@ -45,6 +44,10 @@ public class EditMessageMedia extends BaseRequest<EditMessageMedia, BaseResponse
 
     public EditMessageMedia replyMarkup(InlineKeyboardMarkup replyMarkup) {
         return add("reply_markup", replyMarkup);
+    }
+
+    public EditMessageMedia businessConnectionId(String businessConnectionId) {
+        return add("business_connection_id", businessConnectionId);
     }
 
     @Override

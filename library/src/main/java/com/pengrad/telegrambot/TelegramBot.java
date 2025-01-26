@@ -8,9 +8,11 @@ import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.response.BaseResponse;
+import com.pengrad.telegrambot.utility.BotUtils;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,16 +20,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.TimeUnit;
 
+import static com.pengrad.telegrambot.RequestPreprocessorKt.getEmptyRequestPreprocessor;
+
 /**
  * Stas Parshin
  * 16 October 2015
  */
-public class TelegramBot {
+public class TelegramBot implements TelegramAware {
 
     private final String token;
     private final TelegramBotClient api;
     private final FileApi fileApi;
     private final UpdatesHandler updatesHandler;
+    private final RequestPreprocessor requestPreprocessor;
 
     public TelegramBot(String botToken) {
         this(new Builder(botToken));
@@ -38,14 +43,18 @@ public class TelegramBot {
         this.api = builder.api;
         this.fileApi = builder.fileApi;
         this.updatesHandler = builder.updatesHandler;
+        this.requestPreprocessor = builder.requestPreprocessor;
     }
 
-    public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request) {
+    @NotNull
+    public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(@NotNull BaseRequest<T, R> request) {
+        requestPreprocessor.process(request);
         return api.send(request);
     }
 
-    public <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(T request, Callback<T, R> callback) {
-        api.send(request, callback);
+    public <T extends BaseRequest<T, R>, R extends BaseResponse> Cancellable execute(T request, Callback<T, R> callback) {
+        requestPreprocessor.process(request);
+        return api.send(request, callback);
     }
 
     public String getToken() {
@@ -77,6 +86,7 @@ public class TelegramBot {
     }
 
     public void setUpdatesListener(UpdatesListener listener, ExceptionHandler exceptionHandler, GetUpdates request) {
+        updatesHandler.stop();
         updatesHandler.start(this, listener, exceptionHandler, request);
     }
 
@@ -96,6 +106,7 @@ public class TelegramBot {
         private FileApi fileApi;
         private TelegramBotClient api;
         private UpdatesHandler updatesHandler;
+        private RequestPreprocessor requestPreprocessor;
 
         private OkHttpClient okHttpClient;
         private String apiUrl;
@@ -107,6 +118,7 @@ public class TelegramBot {
             api = new TelegramBotClient(client(null), gson(), apiUrl(API_URL, botToken, useTestServer));
             fileApi = new FileApi(botToken);
             updatesHandler = new UpdatesHandler(100);
+            requestPreprocessor = getEmptyRequestPreprocessor();
         }
 
         public Builder debug() {
@@ -139,6 +151,11 @@ public class TelegramBot {
             return this;
         }
 
+        public Builder requestPreprocessor(RequestPreprocessor requestPreprocessor) {
+            this.requestPreprocessor = requestPreprocessor;
+            return this;
+        }
+
         public TelegramBot build() {
             if (okHttpClient != null || apiUrl != null) {
                 OkHttpClient client = okHttpClient != null ? okHttpClient : client(null);
@@ -165,7 +182,7 @@ public class TelegramBot {
         }
 
         private static Gson gson() {
-            return new Gson();
+            return BotUtils.GSON;
         }
 
         private static String apiUrl(String apiUrl, String botToken, boolean useTestServer) {
