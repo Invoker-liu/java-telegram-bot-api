@@ -35,12 +35,28 @@ public class SendVideo extends AbstractMultipartRequest<SendVideo> {
         return add("height", height);
     }
 
+    /**
+     * @deprecated Use thumbnail instead
+     */
+    @Deprecated
     public SendVideo thumb(byte[] thumb) {
-        return super.thumb(thumb);
+        return thumbnail(thumb);
     }
 
+    /**
+     * @deprecated Use thumbnail instead
+     */
+    @Deprecated
     public SendVideo thumb(File thumb) {
-        return super.thumb(thumb);
+        return thumbnail(thumb);
+    }
+
+    public SendVideo thumbnail(byte[] thumbnail) {
+        return super.thumbnail(thumbnail);
+    }
+
+    public SendVideo thumbnail(File thumbnail) {
+        return super.thumbnail(thumbnail);
     }
 
     public SendVideo caption(String caption) {
@@ -57,6 +73,14 @@ public class SendVideo extends AbstractMultipartRequest<SendVideo> {
 
     public SendVideo supportsStreaming(boolean supportsStreaming) {
         return add("supports_streaming", supportsStreaming);
+    }
+
+    public SendVideo hasSpoiler(boolean has_spoiler) {
+        return add("has_spoiler", has_spoiler);
+    }
+
+    public SendVideo showCaptionAboveMedia(Boolean showCaptionAboveMedia) {
+        return add("show_caption_above_media", showCaptionAboveMedia);
     }
 
     @Override

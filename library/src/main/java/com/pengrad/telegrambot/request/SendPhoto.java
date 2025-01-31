@@ -35,6 +35,14 @@ public class SendPhoto extends AbstractMultipartRequest<SendPhoto> {
         return add("caption_entities", entities);
     }
 
+    public SendPhoto hasSpoiler(boolean has_spoiler) {
+        return add("has_spoiler", has_spoiler);
+    }
+
+    public SendPhoto showCaptionAboveMedia(Boolean showCaptionAboveMedia) {
+        return add("show_caption_above_media", showCaptionAboveMedia);
+    }
+
     @Override
     protected String getFileParamName() {
         return "photo";

@@ -35,4 +35,13 @@ public class EditMessageLiveLocation extends BaseRequest<EditMessageLiveLocation
     public EditMessageLiveLocation replyMarkup(InlineKeyboardMarkup replyMarkup) {
         return add("reply_markup", replyMarkup);
     }
+
+    public EditMessageLiveLocation livePeriod(int livePeriod) {
+        return add("live_period", livePeriod);
+    }
+
+    public EditMessageLiveLocation businessConnectionId(String businessConnectionId) {
+        return add("business_connection_id", businessConnectionId);
+    }
+
 }

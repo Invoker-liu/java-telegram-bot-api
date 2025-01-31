@@ -19,9 +19,10 @@ public class InlineQueryResultDocument extends InlineQueryResult<InlineQueryResu
     private String caption;
     private String parse_mode;
     private String description;
-    private String thumb_url;
-    private Integer thumb_width;
-    private Integer thumb_height;
+
+    private String thumbnail_url;
+    private Integer thumbnail_width;
+    private Integer thumbnail_height;
 
 
     public InlineQueryResultDocument(String id, String documentUrl, String title, String mimeType) {
@@ -46,18 +47,43 @@ public class InlineQueryResultDocument extends InlineQueryResult<InlineQueryResu
         return this;
     }
 
+    /**
+     * @deprecated Use thumbnailUrl instead
+     */
+    @Deprecated
     public InlineQueryResultDocument thumbUrl(String thumbUrl) {
-        this.thumb_url = thumbUrl;
-        return this;
+        return thumbnailUrl(thumbUrl);
     }
 
+    /**
+     * @deprecated Use thumbnailWidth instead
+     */
+    @Deprecated
     public InlineQueryResultDocument thumbWidth(Integer thumbWidth) {
-        this.thumb_width = thumbWidth;
+        return thumbnailWidth(thumbWidth);
+    }
+
+    /**
+     * @deprecated Use thumbnailHeight instead
+     */
+    @Deprecated
+    public InlineQueryResultDocument thumbHeight(Integer thumbHeight) {
+        return thumbnailHeight(thumbHeight);
+    }
+
+
+    public InlineQueryResultDocument thumbnailUrl(String thumbnailUrl) {
+        this.thumbnail_url = thumbnailUrl;
         return this;
     }
 
-    public InlineQueryResultDocument thumbHeight(Integer thumbHeight) {
-        this.thumb_height = thumbHeight;
+    public InlineQueryResultDocument thumbnailWidth(Integer thumbnailWidth) {
+        this.thumbnail_width = thumbnailWidth;
+        return this;
+    }
+
+    public InlineQueryResultDocument thumbnailHeight(Integer thumbnailHeight) {
+        this.thumbnail_height = thumbnailHeight;
         return this;
     }
 }

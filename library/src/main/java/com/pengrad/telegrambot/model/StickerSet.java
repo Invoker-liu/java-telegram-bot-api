@@ -16,11 +16,10 @@ public class StickerSet implements Serializable {
     private String name;
     private String title;
     private Type sticker_type;
-    private Boolean is_animated;
-    private Boolean is_video;
     private Boolean contains_masks;
     private Sticker[] stickers;
-    private PhotoSize thumb;
+    private PhotoSize thumbnail;
+
 
     public String name() {
         return name;
@@ -34,13 +33,17 @@ public class StickerSet implements Serializable {
         return sticker_type;
     }
 
+    /**
+     * @deprecated StickerSets can contain both animated and non-animated stickers since Bot API 7.2
+     */
+    @Deprecated
     public Boolean isAnimated() {
-        return is_animated;
+        return false;
     }
 
-    /** 
-     *  @deprecated Use type() and check if it equals to Type.mask
-     */   
+    /**
+     * @deprecated Use type() and check if it equals to Type.mask
+     */
     @Deprecated
     public Boolean containsMasks() {
         return contains_masks;
@@ -50,12 +53,24 @@ public class StickerSet implements Serializable {
         return stickers;
     }
 
-    public PhotoSize thumb() {
-        return thumb;
+    public PhotoSize thumbnail() {
+        return thumbnail;
     }
 
+    /**
+     * @deprecated Use thumbnail instead
+     */
+    @Deprecated
+    public PhotoSize thumb() {
+        return thumbnail();
+    }
+
+    /**
+     * @deprecated StickerSets can contain both animated and non-animated stickers since Bot API 7.2
+     */
+    @Deprecated
     public Boolean isVideo() {
-        return is_video;
+        return false;
     }
 
     @Override
@@ -63,19 +78,12 @@ public class StickerSet implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StickerSet that = (StickerSet) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(title, that.title) &&
-                Objects.equals(sticker_type, that.sticker_type) &&
-                Objects.equals(is_animated, that.is_animated) &&
-                Objects.equals(is_video, that.is_video) &&
-                Objects.equals(contains_masks, that.contains_masks) &&
-                Arrays.equals(stickers, that.stickers) &&
-                Objects.equals(thumb, that.thumb);
+        return Objects.equals(name, that.name) && Objects.equals(title, that.title) && sticker_type == that.sticker_type && Objects.equals(contains_masks, that.contains_masks) && Arrays.equals(stickers, that.stickers) && Objects.equals(thumbnail, that.thumbnail);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(name, title, sticker_type, is_animated, is_video, thumb);
+        int result = Objects.hash(name, title, sticker_type, contains_masks, thumbnail);
         result = 31 * result + Arrays.hashCode(stickers);
         return result;
     }
@@ -85,12 +93,10 @@ public class StickerSet implements Serializable {
         return "StickerSet{" +
                 "name='" + name + '\'' +
                 ", title='" + title + '\'' +
-                ", sticker_type='" + sticker_type + '\'' +
-                ", is_animated=" + is_animated +
-                ", is_video=" + is_video +
+                ", sticker_type=" + sticker_type +
                 ", contains_masks=" + contains_masks +
                 ", stickers=" + Arrays.toString(stickers) +
-                ", thumb=" + thumb +
+                ", thumbnail=" + thumbnail +
                 '}';
     }
 }

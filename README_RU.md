@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/pengrad/java-telegram-bot-api/branch/master/graph/badge.svg)](https://codecov.io/gh/pengrad/java-telegram-bot-api)
 
 Java библиотека, созданная для работы с [Telegram Bot API](https://core.telegram.org/bots/api)
-- Полная поддержка всех методов BOT API 6.3
+- Полная поддержка всех методов BOT API 8.1
 - Поддержка Telegram [паспорта](https://core.telegram.org/passport) и дешифровки (Decryption API);
 - Поддержка [платежей](https://core.telegram.org/bots/payments);
 - [Игровая платформа](https://telegram.org/blog/games).
@@ -13,14 +13,14 @@ Java библиотека, созданная для работы с [Telegram B
 
 Gradle:
 ```groovy
-implementation 'com.github.pengrad:java-telegram-bot-api:6.3.0'
+implementation 'com.github.pengrad:java-telegram-bot-api:8.1.0'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.pengrad</groupId>
   <artifactId>java-telegram-bot-api</artifactId>
-  <version>6.3.0</version>
+  <version>8.1.0</version>
 </dependency>
 ```
 Также JAR со всеми зависимостями можно найти [в релизах](https://github.com/pengrad/java-telegram-bot-api/releases).
@@ -32,9 +32,21 @@ TelegramBot bot = new TelegramBot("BOT_TOKEN");
 
 // Подписка на обновления
 bot.setUpdatesListener(updates -> {
-    // ... process updates
+
+    // Обработка обновлений
+    
     // return id of last processed update or confirm them all
     return UpdatesListener.CONFIRMED_UPDATES_ALL;
+// Создание Обработчика ошибок
+}, e -> {
+    if (e.response() != null) {
+        // Ошибка из Телеграма
+        e.response().errorCode();
+        e.response().description();
+    } else {
+        // Как видно проблема сети
+        e.printStackTrace();
+    }
 });
 
 // Отправка сообщений
@@ -197,6 +209,20 @@ bot.setUpdatesListener(new UpdatesListener() {
         // обработка обновлений
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+// Создание Обработчика ошибок
+}, new ExceptionHandler() {
+    @override
+    public void onException(TelegramException e)
+    {
+        if (e.response() != null) {
+            // Ошибка из Телеграма
+            e.response().errorCode();
+            e.response().description();
+        } else {
+            // Как видно проблема сети
+            e            .printStackTrace();
+        }
     }
 });
 ```

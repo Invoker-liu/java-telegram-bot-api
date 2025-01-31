@@ -1,11 +1,10 @@
 # Java Telegram Bot API
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.pengrad/java-telegram-bot-api.svg)](https://search.maven.org/artifact/com.github.pengrad/java-telegram-bot-api)
-[![Build Status](https://travis-ci.com/pengrad/java-telegram-bot-api.svg?branch=master)](https://app.travis-ci.com/github/pengrad/java-telegram-bot-api)
 [![codecov](https://codecov.io/gh/pengrad/java-telegram-bot-api/branch/master/graph/badge.svg)](https://codecov.io/gh/pengrad/java-telegram-bot-api)
 
 Java library for interacting with [Telegram Bot API](https://core.telegram.org/bots/api)
-- Full support of all Bot API 6.3 methods
+- Full support of all Bot API 8.1 methods
 - Telegram [Passport](https://core.telegram.org/passport) and Decryption API
 - Bot [Payments](https://core.telegram.org/bots/payments)
 - [Gaming Platform](https://telegram.org/blog/games)
@@ -14,14 +13,14 @@ Java library for interacting with [Telegram Bot API](https://core.telegram.org/b
 
 Gradle:
 ```groovy
-implementation 'com.github.pengrad:java-telegram-bot-api:6.3.0'
+implementation 'com.github.pengrad:java-telegram-bot-api:8.1.0'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.pengrad</groupId>
   <artifactId>java-telegram-bot-api</artifactId>
-  <version>6.3.0</version>
+  <version>8.1.0</version>
 </dependency>
 ```
 [JAR with all dependencies on release page](https://github.com/pengrad/java-telegram-bot-api/releases)
@@ -37,6 +36,16 @@ bot.setUpdatesListener(updates -> {
     // ... process updates
     // return id of last processed update or confirm them all
     return UpdatesListener.CONFIRMED_UPDATES_ALL;
+// Create Exception Handler
+}, e -> {
+    if (e.response() != null) {
+        // got bad response from telegram
+        e.response().errorCode();
+        e.response().description();
+    } else {
+        // probably network error
+        e.printStackTrace();
+    }
 });
 
 // Send messages
@@ -197,6 +206,20 @@ bot.setUpdatesListener(new UpdatesListener() {
         // process updates
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+// Create Exception Handler
+}, new ExceptionHandler() {
+    @override
+    public void onException(TelegramException e)
+    {
+        if (e.response() != null) {
+            // got bad response from telegram
+            e.response().errorCode();
+            e.response().description();
+        } else {
+            // probably network error
+            e            .printStackTrace();
+        }
     }
 });
 ```

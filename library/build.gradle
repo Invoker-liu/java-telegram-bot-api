@@ -1,21 +1,32 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
+plugins {
+    id "java-library"
+    id 'jacoco'
+    id "org.jetbrains.kotlin.jvm" version "1.9.22"
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.9.1'
-    compile 'com.squareup.okhttp3:okhttp:4.10.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+    api 'com.google.code.gson:gson:2.10.1'
+    api 'com.squareup.okhttp3:okhttp:4.12.0'
+    api 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
-    testCompile 'junit:junit:4.13.1'
-    testCompile 'nl.jqno.equalsverifier:equalsverifier:3.1.13'
-    testCompile 'org.reflections:reflections:0.9.12'
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.1.13'
+    testImplementation 'org.reflections:reflections:0.9.12'
+    testImplementation 'org.jetbrains.kotlin:kotlin-reflect'
+}
+
+jar {
+    manifest {
+        attributes "Automatic-Module-Name": "telegram.bot.api"
+    }
 }
 
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = "0.8.12"
 }
 
 jacocoTestReport {
@@ -29,10 +40,24 @@ javadoc {
     options.encoding = 'UTF-8'
 }
 
-task fatJar(type: Jar) {
-    baseName = rootProject.name + '-full'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+test {
+    if (project.hasProperty('excludeTests')) {
+        exclude project.property('excludeTests')
+    }
+    if (project.hasProperty('prTest')) {
+        // TODO move "functional" tests into specific dir and exclude it
+        exclude '**/Base64Test.class'
+        exclude '**/CheckTelegramAuthTest.class'
+        exclude '**/PaymentsTest.class'
+        exclude '**/TelegramBotTest.class'
+        exclude '**/UpdatesListenerTest.class'
+    }
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+tasks.withType(Test).configureEach {
+    testLogging {
+        events "started", "passed", "skipped", "failed"
+    }
+}
+
+apply from: rootProject.file('gradle/gradle-publish-plugin.gradle')

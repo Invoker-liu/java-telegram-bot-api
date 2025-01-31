@@ -15,6 +15,9 @@ public class KeyboardButton implements Serializable {
     private boolean request_contact;
     private boolean request_location;
     private KeyboardButtonPollType request_poll;
+    private KeyboardButtonRequestUsers request_users;
+    private KeyboardButtonRequestUser request_user; // @deprecated
+    private KeyboardButtonRequestChat request_chat;
     private WebAppInfo web_app;
 
     public KeyboardButton(String text) {
@@ -33,6 +36,25 @@ public class KeyboardButton implements Serializable {
 
     public KeyboardButton requestPoll(KeyboardButtonPollType poll) {
         this.request_poll = poll;
+        return this;
+    }
+
+    /**
+     * @deprecated Use requestUsers instead
+     */
+    @Deprecated
+    public KeyboardButton requestUser(KeyboardButtonRequestUser user) {
+        this.request_user = user;
+        return this;
+    }
+
+    public KeyboardButton requestUsers(KeyboardButtonRequestUsers users) {
+        this.request_users = users;
+        return this;
+    }
+
+    public KeyboardButton requestChat(KeyboardButtonRequestChat chat) {
+        this.request_chat = chat;
         return this;
     }
 

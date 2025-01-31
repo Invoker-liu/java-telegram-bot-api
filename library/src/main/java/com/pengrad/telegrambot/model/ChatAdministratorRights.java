@@ -22,54 +22,69 @@ public class ChatAdministratorRights implements Serializable {
     private Boolean can_post_messages;
     private Boolean can_edit_messages;
     private Boolean can_pin_messages;
+    private Boolean can_post_stories;
+    private Boolean can_edit_stories;
+    private Boolean can_delete_stories;
     private Boolean can_manage_topics;
 
     public Boolean isAnonymous() {
-        return is_anonymous;
+        return is_anonymous != null && is_anonymous;
     }
 
     public Boolean canManageChat() {
-        return can_manage_chat;
+        return can_manage_chat != null && can_manage_chat;
     }
 
     public Boolean canDeleteMessages() {
-        return can_delete_messages;
+        return can_delete_messages != null && can_delete_messages;
     }
 
     public Boolean canManageVideoChats() {
-        return can_manage_video_chats;
+        return can_manage_video_chats != null && can_manage_video_chats;
     }
 
     public Boolean canRestrictMembers() {
-        return can_restrict_members;
+        return can_restrict_members != null && can_restrict_members;
     }
 
     public Boolean canPromoteMembers() {
-        return can_promote_members;
+        return can_promote_members != null && can_promote_members;
     }
 
     public Boolean canChangeInfo() {
-        return can_change_info;
+        return can_change_info != null && can_change_info;
     }
 
     public Boolean canInviteUsers() {
-        return can_invite_users;
+        return can_invite_users != null && can_invite_users;
     }
 
     public Boolean canPostMessages() {
-        return can_post_messages;
+        return can_post_messages != null && can_post_messages;
     }
 
     public Boolean canEditMessages() {
-        return can_edit_messages;
+        return can_edit_messages != null && can_edit_messages;
     }
 
     public Boolean canPinMessages() {
-        return can_pin_messages;
+        return can_pin_messages != null && can_pin_messages;
+    }
+
+    public Boolean canPostStories() {
+        return can_post_stories != null && can_post_stories;
+    }
+
+    public Boolean canEditStories() {
+        return can_edit_stories != null && can_edit_stories;
+    }
+
+    public Boolean canDeleteStories() {
+        return can_delete_stories != null && can_delete_stories;
     }
 
     public Boolean canManageTopics() {
-        return can_manage_topics;
+        return can_manage_topics != null && can_manage_topics;
     }
 
     public ChatAdministratorRights canManageChat(boolean canManageChat) {
@@ -122,6 +137,21 @@ public class ChatAdministratorRights implements Serializable {
         return this;
     }
 
+    public ChatAdministratorRights canPostStories(boolean canPostStories) {
+        this.can_post_stories = canPostStories;
+        return this;
+    }
+
+    public ChatAdministratorRights canEditStories(boolean canEditStories) {
+        this.can_edit_stories = canEditStories;
+        return this;
+    }
+
+    public ChatAdministratorRights canDeleteStories(boolean canDeleteStories) {
+        this.can_delete_stories = canDeleteStories;
+        return this;
+    }
+
     public ChatAdministratorRights canManageTopics(boolean canManageTopics) {
         this.can_manage_topics = canManageTopics;
         return this;
@@ -144,6 +174,9 @@ public class ChatAdministratorRights implements Serializable {
                 Objects.equals(can_post_messages, that.can_post_messages) &&
                 Objects.equals(can_edit_messages, that.can_edit_messages) &&
                 Objects.equals(can_pin_messages, that.can_pin_messages) &&
+                Objects.equals(can_post_stories, that.can_post_stories) &&
+                Objects.equals(can_edit_stories, that.can_edit_stories) &&
+                Objects.equals(can_delete_stories, that.can_delete_stories) &&
                 Objects.equals(can_manage_topics, that.can_manage_topics);
     }
 
@@ -160,6 +193,9 @@ public class ChatAdministratorRights implements Serializable {
                 can_post_messages,
                 can_edit_messages,
                 can_pin_messages,
+                can_post_stories,
+                can_edit_stories,
+                can_delete_stories,
                 can_manage_topics);
     }
 
@@ -177,6 +213,9 @@ public class ChatAdministratorRights implements Serializable {
                 ", can_post_messages=" + can_post_messages +
                 ", can_edit_messages=" + can_edit_messages +
                 ", can_pin_messages=" + can_pin_messages +
+                ", can_post_stories=" + can_post_stories +
+                ", can_edit_stories=" + can_edit_stories +
+                ", can_delete_stories=" + can_delete_stories +
                 ", can_manage_topics=" + can_manage_topics +
                 '}';
     }
